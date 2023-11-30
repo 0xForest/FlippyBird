@@ -1,0 +1,15 @@
+App(
+    appid="flippy_bird",
+    name="Flippy Bird",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="flippy_bird_game_app",
+    requires=["gui"],
+    stack_size=4 * 1024, # stack size in bytes to allocate for an application on its startup. Note that allocating a stack too small for an app to run will cause a system crash due to stack overflow, and allocating too much stack space will reduce usable heap memory size for apps to process data. Note: you can use ps and free CLI commands to profile your app's memory usage.
+    order=100, # order of an application within its group when sorting entries in it. The lower the order is, the closer to the start of the list the item is placed. Used for ordering startup hooks and menu entries.
+    fap_icon="inyoni_10px.png", # name of a .png file, 1-bit color depth, 10x10px, to be embedded within .fap file.
+    fap_category="Games", # string, may be empty. App subcategory, also determines the path of the FAP within the apps folder in the file system.
+    fap_icon_assets="assets",
+    fap_author="@DroomOne & @xMasterX & @codeallnight & @0xForest",
+    fap_version="1.2", # string, application version. The default value is "0.1". You can also use a tuple of 2 numbers in the form of (x,y) to specify the version. It is also possible to add more dot-separated parts to the version, like patch number, but only major and minor version numbers are stored in the built .fap.
+    fap_description="Flappy Bird Game - Flippy Patch",
+)
