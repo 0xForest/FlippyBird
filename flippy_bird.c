@@ -6,6 +6,7 @@
 #include <gui/gui.h>
 #include <input/input.h>
 #include <dolphin/dolphin.h>
+#include "phrases.h" // Edit contents for new phrases!
 
 #define TAG "Flippy"
 #define DEBUG false // Remember to change to false
@@ -67,6 +68,7 @@ typedef struct {
     PILAR pilars[FLAPPY_PILAR_MAX];
     bool debug;
     State state;
+    const char* phrase;
 } GameState;
 
 typedef struct {
@@ -100,6 +102,11 @@ static void flappy_game_state_init(GameState* const game_state) {
     bird.point.x = 15;
     bird.point.y = 32;
 
+    // Randomly select phrase
+    int num_phrases = sizeof(encouraging_phrases) / sizeof(encouraging_phrases[0]);
+    int random_index = rand() % num_phrases;
+
+    game_state->phrase = encouraging_phrases[random_index];
     game_state->debug = DEBUG;
     game_state->bird = bird;
     game_state->pilars_count = 0;
@@ -175,8 +182,6 @@ static void flappy_game_flap(GameState* const game_state) {
     game_state->bird.gravity = FLAPPY_GRAVITY_JUMP;
 }
 
-static bool phrase_displayed = false; // Declare the flag outside the loop
-
 static void flappy_game_render_callback(Canvas* const canvas, void* ctx) {
     furi_assert(ctx);
     const GameState* game_state = ctx;
@@ -246,7 +251,7 @@ static void flappy_game_render_callback(Canvas* const canvas, void* ctx) {
         }
     }
 
-    if(game_state->state == GameStateGameOver && !phrase_displayed) {
+    if(game_state->state == GameStateGameOver) {
         // Screen is 128x64 px
         canvas_set_color(canvas, ColorWhite);
         canvas_draw_box(canvas, 34, 20, 62, 24);
@@ -262,24 +267,8 @@ static void flappy_game_render_callback(Canvas* const canvas, void* ctx) {
         snprintf(buffer, sizeof(buffer), "Score: %u", game_state->points);
         canvas_draw_str_aligned(canvas, 64, 41, AlignCenter, AlignBottom, buffer);
 
-        // Insert words of encouragement to motivate more time investment.
-        const char* encouraging_phrases[] = {
-            "Nice try!",
-            "Don't give up!",
-            "Keep going!",
-            "You can do it!",
-            "Try again!",
-        };
-
-        // Randomly select phrase
-        int num_phrases = sizeof(encouraging_phrases) / sizeof(encouraging_phrases[0]);
-        int random_index = rand() % num_phrases;
-        const char* random_phrase = encouraging_phrases[random_index];
-
         // Initiate encouragement protocol
-        canvas_draw_str_aligned(canvas, 64, 53, AlignCenter, AlignTop, random_phrase);
-
-        phrase_displayed = true;
+        canvas_draw_str_aligned(canvas, 64, 53, AlignCenter, AlignTop, game_state->phrase);
     }
 }
 
@@ -337,6 +326,18 @@ static void flappy_game_update_timer_callback(void* context) {
         view, GameState * game_state, { flappy_game_tick(game_state); }, true);
 }
 
+/**
+ * @brief      Callback for exiting the application.
+ * @details    This function is called when user press back button.  We return VIEW_NONE to
+ *            indicate that we want to exit the application.
+ * @param      _context  The context - unused
+ * @return     next view id
+*/
+static uint32_t skeleton_navigation_exit_callback(void* _context) {
+    UNUSED(_context);
+    return VIEW_NONE;
+}
+
 int32_t flippy_bird_game_app(void* p) {
     UNUSED(p);
     int32_t return_code = 0;
@@ -355,6 +356,7 @@ int32_t flippy_bird_game_app(void* p) {
     view_set_draw_callback(view, flappy_game_render_callback);
     view_set_context(view, view);
     view_set_input_callback(view, flappy_game_input_callback);
+    view_set_previous_callback(view, skeleton_navigation_exit_callback);
 
     FuriTimer* timer =
         furi_timer_alloc(flappy_game_update_timer_callback, FuriTimerTypePeriodic, view);
