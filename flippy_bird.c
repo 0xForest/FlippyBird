@@ -7,6 +7,7 @@
 #include <input/input.h>
 #include <dolphin/dolphin.h>
 #include "phrases.h" // Edit contents for new phrases!
+#include <furi_hal.h>
 
 #define TAG "Flippy"
 #define DEBUG false // Remember to change to false
@@ -179,7 +180,15 @@ static void flappy_game_tick(GameState* const game_state) {
 }
 
 static void flappy_game_flap(GameState* const game_state) {
-    game_state->bird.gravity = FLAPPY_GRAVITY_JUMP;
+    if(furi_hal_speaker_acquire(10)) {
+        furi_hal_speaker_start(880, 1.0);
+        game_state->bird.gravity = FLAPPY_GRAVITY_JUMP;
+        furi_delay_ms(10);
+        furi_hal_speaker_stop();
+        furi_hal_speaker_release();
+    } else {
+        game_state->bird.gravity = FLAPPY_GRAVITY_JUMP;
+    }
 }
 
 static void flappy_game_render_callback(Canvas* const canvas, void* ctx) {
@@ -380,7 +389,7 @@ int32_t flippy_bird_game_app(void* p) {
     furi_timer_free(timer);
     view_dispatcher_remove_view(view_dispatcher, 2);
     view_dispatcher_free(view_dispatcher);
-    view_free_model(view);
+    //view_free_model(view); // Crashes Flipper because view_free(view) already.
     view_free(view);
     furi_record_close(RECORD_GUI);
 
