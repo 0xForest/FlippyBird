@@ -4,6 +4,25 @@ This app is a port of [xMasterX's FlappyBird](https://github.com/xMasterX/all-th
 
 There are minor asset swaps and more features to come!
 
+## Building:
+
+- Install [uFBT - micro Flipper Build Tool](https://github.com/flipperdevices/flipperzero-ufbt)
+- Run build tool's update command to fetch the latest dev SDK. `ufbt update --channel=dev`
+- `git clone https://github.com/0xForest/FlippyBird`
+- Change your terminal's working directory to the FlippyBird project folder: `cd FlippyBird`
+- Run `ufbt` to build app or `ufbt launch` to build and launch the app on a connected flipper.
+- Built binary will be created as `/FlipperBird/dist/flippy_bird.fap`
+
+## Installing
+- Copy `/FlipperBird/dist/flippy_bird.fap` to your Flipper's SD Card.
+- Run by selecting plugin from Games menu.
+
+![Install](install.gif "Install")
+![Run](run.gif "Run")
+
+## Troubleshooting.
+- If anything goes wrong, the flipper can be reset by holding the `left arrow` and `back` keys together. 
+
 Credits:
 
 [DroomOne](https://github.com/DroomOne/Flipper-Plugin-Tutorial) For the Flipper plugin tutorial and OG flappy code.
