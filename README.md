@@ -1,8 +1,12 @@
 # Flippy Bird
 
+![demo]flippy_bird.gif "demo")
+
 This app is a port of [xMasterX's FlappyBird](https://github.com/xMasterX/all-the-plugins/tree/dev/base_pack/flappy_bird) code to use View's and to implement [CodeAllNight's skeleton](https://github.com/jamisonderek/flipper-zero-tutorials/tree/main/ui/skeleton_app) app UI framework.
 
 There are minor asset swaps and more features to come!
+
+This was all created to learn a bit of C, and flipper plugin develeopment, I hope it helps you in some way too. :)
 
 ## Building:
 
