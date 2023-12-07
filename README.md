@@ -6,7 +6,7 @@ This app is a port of [xMasterX's FlappyBird](https://github.com/xMasterX/all-th
 
 There are minor asset swaps and more features to come!
 
-This was all created to learn a bit of C, and flipper plugin develeopment, I hope it helps you in some way too. :)
+This was all created to learn a bit of C, and flipper plugin development, I hope it helps you in some way too. :)
 
 ## Building:
 
